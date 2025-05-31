@@ -1,54 +1,83 @@
-<svg viewBox="0 0 115 25" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg viewBox="0 0 240 25" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <style>
     svg {
-      width: 110vw;
+      width: 100vw;
       height: auto;
       position: fixed;
-      top: -5px;
-      transform: rotate(360deg);
-      overflow: visible;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      pointer-events: none;
     }
 
-    .circle {
-      animation: circle 3s linear infinite;
-      fill: #000;
+    .wave {
+      animation: move 6s linear infinite;
+      fill: url(#gradient-light);
+      filter: url(#glow);
+      transition: fill 0.3s ease;
     }
 
-    .circle:hover {
-      fill: #fff;
-    }
-
-    #circle2 {
+    #wave2 {
       animation-duration: 6s;
       animation-direction: reverse;
-      opacity: 0.9;
+      opacity: 0.8;
     }
 
-    #circle3 {
+    #wave3 {
       animation-duration: 3s;
-      opacity: 0.6;
+      opacity: 0.5;
     }
 
-    @keyframes circle {
-      to {
-        transform: translateX(-100%);
+    .wave:hover {
+      fill: white !important;
+    }
+
+    @keyframes move {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-60%); }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .wave {
+        fill: url(#gradient-dark);
       }
     }
   </style>
 
   <defs>
-    <filter id="anim">
-      <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur" />
-      <feColorMatrix in="blur" mode="matrix" values="
-           1 0 0 0 0  
-           0 1 0 0 0  
-           0 0 1 0 0  
-           0 0 0 13 -9" result="anim" />
-      <feBlend in="SourceGraphic" in2="anim" />
+    <!-- Wave path -->
+    <path id="wavePath" d="M 0,10 C 30,10 30,15 60,15 90,15 90,10 120,10 150,10 150,15 180,15 210,15 210,10 240,10 v 28 h -240 z" />
+
+    <!-- Blur glow filter -->
+    <filter id="glow">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur" />
+      <feColorMatrix in="blur" type="matrix" values="
+         1 0 0 0 0  
+         0 1 0 0 0  
+         0 0 1 0 0  
+         0 0 0 15 -5" result="glow" />
+      <feBlend in="SourceGraphic" in2="glow" mode="normal" />
     </filter>
-    <path id="circle" d="M 0,10 C 30,10 30,15 60,15 90,15 90,10 120,10 150,10 150,15 180,15 210,15 210,10 240,10 v 28 h -240 z" />
+
+    <!-- Light mode gradient -->
+    <linearGradient id="gradient-light" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1e90ff" />
+      <stop offset="100%" stop-color="#9b59b6" />
+    </linearGradient>
+
+    <!-- Dark mode gradient -->
+    <linearGradient id="gradient-dark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3498db" />
+      <stop offset="100%" stop-color="#8e44ad" />
+    </linearGradient>
   </defs>
 
-  <use id="circle2" class="circle" xlink:href="#circle" x="0" y="0" />
-  <use id="circle3" class="circle" xlink:href="#circle" x="0" y="-2" />
+  <!-- Waves -->
+  <g class="wave" id="wave2">
+    <use xlink:href="#wavePath" />
+  </g>
+  <g class="wave" id="wave3">
+    <use xlink:href="#wavePath" y="-2" />
+  </g>
 </svg>
+
